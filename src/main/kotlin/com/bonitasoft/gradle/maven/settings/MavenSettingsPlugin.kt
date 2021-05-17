@@ -28,7 +28,6 @@ import org.gradle.authentication.http.HttpHeaderAuthentication
 import java.net.InetAddress
 import java.net.NetworkInterface
 import java.net.URI
-import java.util.function.Predicate
 
 const val EXTENSION_NAME = "mavenSettings"
 
@@ -130,14 +129,14 @@ class MavenSettingsPlugin : Plugin<Project> {
     }
 
     private fun registerMirrors(project: Project) {
-        val mirrorsToAdd = mutableMapOf<String,Action<MavenArtifactRepository>>()
+        val mirrorsToAdd = mutableMapOf<String, Action<MavenArtifactRepository>>()
         project.repositories.toList().filter { repo ->
             if (repo.name.equals(ArtifactRepositoryContainer.DEFAULT_MAVEN_LOCAL_REPO_NAME)) {
                 return@filter false
             }
             repo.getMirror(settings)?.also { mirror ->
                 project.logger.info("Replaced '${repo.name}' with mirror ${mirror.id} configured in maven's settings.xml")
-                mirrorsToAdd.putIfAbsent(mirror.id){ repo ->
+                mirrorsToAdd.putIfAbsent(mirror.id) { repo ->
                     repo.name = mirror.id
                     repo.url = URI.create(mirror.url)
                 }

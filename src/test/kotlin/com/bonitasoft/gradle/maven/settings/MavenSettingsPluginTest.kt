@@ -19,6 +19,7 @@ import org.junit.Test
 import org.junit.contrib.java.lang.system.EnvironmentVariables
 import org.junit.contrib.java.lang.system.RestoreSystemProperties
 import java.io.File
+import java.net.URI
 import java.nio.file.Paths
 
 class MavenSettingsPluginTest {
@@ -731,9 +732,10 @@ class MavenSettingsPluginTest {
 
         applyPlugin()
 
-        //No profile 3, profile is not activated
+        // mirror should replace the one from profile (even with same id)
         assertThat(project.repositories).hasSize(1).first().satisfies {
             assertThat(it.name).isEqualTo("my.unique.repo")
+            assertThat((it as MavenArtifactRepository).url).isEqualTo(URI("http://maven.mirror.com"))
         }
     }
 }
