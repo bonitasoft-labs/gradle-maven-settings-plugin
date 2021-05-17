@@ -705,4 +705,35 @@ class MavenSettingsPluginTest {
             assertThat(it.name).isEqualTo("mirror")
         }
     }
+
+    @Test
+    fun `mirrors should override repositories when id is the same`() {
+        withSettings {
+            profile {
+                id = "profile1"
+                repository {
+                    id = "my.unique.repo"
+                    url = "http://maven.repo1.com"
+                }
+            }
+            mirror {
+                id = "my.unique.repo"
+                url = "http://maven.mirror.com"
+                mirrorOf = "*"
+            }
+            activeProfiles = listOf("profile1")
+        }
+        project.run {
+            repositories.apply {
+                mavenCentral()
+            }
+        }
+
+        applyPlugin()
+
+        //No profile 3, profile is not activated
+        assertThat(project.repositories).hasSize(1).first().satisfies {
+            assertThat(it.name).isEqualTo("my.unique.repo")
+        }
+    }
 }
