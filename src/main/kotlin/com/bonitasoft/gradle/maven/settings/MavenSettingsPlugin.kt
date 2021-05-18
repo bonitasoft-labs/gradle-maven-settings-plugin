@@ -134,6 +134,7 @@ class MavenSettingsPlugin : Plugin<Project> {
             if (repo.name.equals(ArtifactRepositoryContainer.DEFAULT_MAVEN_LOCAL_REPO_NAME)) {
                 return@filter false
             }
+            // If the current repository has a mirror defined in maven's settings.xml:
             repo.getMirror(settings)?.also { mirror ->
                 project.logger.info("Replaced '${repo.name}' with mirror '${mirror.id}' configured in maven's settings.xml")
                 mirrorsToAdd.putIfAbsent(mirror.id) { repo ->
