@@ -135,7 +135,7 @@ class MavenSettingsPlugin : Plugin<Project> {
                 return@filter false
             }
             repo.getMirror(settings)?.also { mirror ->
-                project.logger.info("Replaced '${repo.name}' with mirror ${mirror.id} configured in maven's settings.xml")
+                project.logger.info("Replaced '${repo.name}' with mirror '${mirror.id}' configured in maven's settings.xml")
                 mirrorsToAdd.putIfAbsent(mirror.id) { repo ->
                     repo.name = mirror.id
                     repo.url = URI.create(mirror.url)
