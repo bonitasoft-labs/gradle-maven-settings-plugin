@@ -38,11 +38,8 @@ kotlin {
     jvmToolchain(17)
 }
 
-tasks.withType<JavaCompile> {
-    options.compilerArgs.addAll(arrayOf("--release", "11"))
-}
-
 tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.addAll(arrayOf("--release", "11"))
     javaCompiler.set(javaToolchains.compilerFor {
         languageVersion.set(JavaLanguageVersion.of(17))
     })
